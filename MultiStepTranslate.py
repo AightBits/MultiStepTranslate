@@ -69,19 +69,34 @@ Provide only the translation in {target_language}.
 
     # Step 2: Refine Translation
     refine_prompt = f"""
-Improve the following translation for accuracy and fluency. 
-Make sure it captures the original meaning and reads naturally in {target_language}:
+You are an expert translator. Below is the original text in {source_language}
+followed by the initial translation in {target_language}.
+
+Original text ({source_language}):
+{source_text}
+
+Initial translation ({target_language}):
 {initial_translation}
+
+Please refine this translation for accuracy and fluency. Ensure it captures
+the original meaning and reads naturally in {target_language}. Provide only
+the refined translation.
 """
     refined_translation = make_api_call(refine_prompt)
 
     # Step 3: Compare Translations
     compare_prompt = f"""
-Between the two translations below, indicate which is better based on accuracy, fluency, 
-and naturalness in {target_language}. Respond with 'Version 1' or 'Version 2':
+You are comparing two translations of the same source text.
+Decide which is better in terms of accuracy, fluency, and naturalness in {target_language}.
+Respond strictly with 'Version 1' or 'Version 2' and no additional text.
+
+Original text ({source_language}):
+{source_text}
+
 Version 1: {initial_translation}
 Version 2: {refined_translation}
 """
+
     best_version = make_api_call(compare_prompt)
 
     # Decide the best translation
