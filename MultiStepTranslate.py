@@ -7,7 +7,7 @@ import json
 API_ENDPOINT = "http://localhost:5000/v1/completions"
 API_KEY = os.environ.get("MY_API_KEY")  # Set via environment variable
 DEFAULT_MODEL = "text-davinci-003"
-DEFAULT_TEMPERATURE = 0.7
+DEFAULT_TEMPERATURE = 0.5
 
 # Build headers
 HEADERS = {"Content-Type": "application/json"}
@@ -60,33 +60,31 @@ def translate_text(source_text: str, source_language: str, target_language: str)
     """
     # Step 1: Initial Translation
     initial_prompt = f"""
-Translate the following text from {source_language} to {target_language}:
-{source_text}
-Ensure the translation is accurate, fluent, and captures all nuances of the original text. 
-Provide only the translation in {target_language}.
+You are an expert translator. Translate the following text from {source_language} to {target_language}.
+Ensure the translation is accurate, fluent, and captures all nuances of the original text. Provide only the translation with no commentary.
+
+{source_language}: {source_text}
+
+{target_language}:
 """
     initial_translation = make_api_call(initial_prompt)
 
     # Step 2: Refine Translation
     refine_prompt = f"""
-You are an expert translator. Below is the original text in {source_language} 
-followed by the initial translation in {target_language}.
+You are an expert translator. Below is the original text in {source_language} followed by the initial translation in {target_language}.
+Please refine this translation for accuracy and fluency. Ensure it captures the original meaning and reads naturally in {target_language}. Provide only the refined translation with no commentary.
 
-Original text ({source_language}):
-{source_text}
+Original text ({source_language}): {source_text}
 
-Initial translation ({target_language}):
-{initial_translation}
+Initial translation ({target_language}): {initial_translation}
 
-Please refine this translation for accuracy and fluency. Ensure it captures 
-the original meaning and reads naturally in {target_language}. Provide only 
-the refined translation.
+Refined translation ({target_language}):
 """
     refined_translation = make_api_call(refine_prompt)
 
     # Step 3: Compare Translations
     compare_prompt = f"""
-You are comparing two translations of the same source text. 
+You are an expert translator comparing two translations of the same source text. 
 Decide which is better in terms of accuracy, fluency, and naturalness in {target_language}.
 Respond strictly with 'Version 1' or 'Version 2' and no additional text.
 
