@@ -69,7 +69,7 @@ Provide only the translation in {target_language}.
 
     # Step 2: Refine Translation
     refine_prompt = f"""
-You are an expert translator. Below is the original text in {source_language}
+You are an expert translator. Below is the original text in {source_language} 
 followed by the initial translation in {target_language}.
 
 Original text ({source_language}):
@@ -78,15 +78,15 @@ Original text ({source_language}):
 Initial translation ({target_language}):
 {initial_translation}
 
-Please refine this translation for accuracy and fluency. Ensure it captures
-the original meaning and reads naturally in {target_language}. Provide only
+Please refine this translation for accuracy and fluency. Ensure it captures 
+the original meaning and reads naturally in {target_language}. Provide only 
 the refined translation.
 """
     refined_translation = make_api_call(refine_prompt)
 
     # Step 3: Compare Translations
     compare_prompt = f"""
-You are comparing two translations of the same source text.
+You are comparing two translations of the same source text. 
 Decide which is better in terms of accuracy, fluency, and naturalness in {target_language}.
 Respond strictly with 'Version 1' or 'Version 2' and no additional text.
 
